@@ -24,7 +24,7 @@ parser.add_argument('--img_height',default=640,type=int)
 #parser.add_argument('--val_size', default=0.2, type=float, help='validation data size.')
 
 # Arguments for lite-UNet model
-parser.add_argument('--batch_size', default=2, type=int, help='Batch size for training.')
+parser.add_argument('--batch_size', default=4, type=int, help='Batch size for training.')
 parser.add_argument('--lr', default=0.0001, type=float, help='Learning rate for optimizers.')
 parser.add_argument('--epochs', default=100, type=int, help='Number of training epochs.')
 parser.add_argument('--output_dir', default='Lite-UNet_model.h5', type=str, help='Path for saving the model after training.')
@@ -37,5 +37,8 @@ val_steps=dl.get_validation_steps_per_epoch()
 
 
 LiteUNet=Lite_UNet(args)
-LiteUNet.train(train_gen,val_gen,train_steps,val_steps)
- 
+# Capture the model and history object returned by train
+model, history = LiteUNet.train(train_gen,val_gen,train_steps,val_steps)
+
+# Plot and save the training history
+LiteUNet.plot_history(history)

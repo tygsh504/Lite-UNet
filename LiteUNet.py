@@ -7,12 +7,33 @@ from keras.models import load_model
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, InputLayer, Activation, BatchNormalization
 from keras.layers import UpSampling2D, Input, Concatenate
 from keras.models import Model
-from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, Callback
 from keras.metrics import Recall, Precision
-from tensorflow.keras import mixed_precision   # <-- NEW import
+from tensorflow.keras import mixed_precision
+import matplotlib.pyplot as plt 
+import os # NEW: Import for OS operations
+from datetime import datetime # NEW: Import for unique filenames
 
 # Enable mixed precision globally
 # mixed_precision.set_global_policy("mixed_float16")
+
+# Custom callback to track the actual learning rate per epoch
+class LrHistory(Callback):
+    """Callback to log the current learning rate at the start of each epoch."""
+    def on_epoch_begin(self, epoch, logs=None):
+        if not hasattr(self.model.optimizer, 'lr'):
+            return
+        # Get the current learning rate value
+        lr = self.model.optimizer.lr
+        if callable(lr):
+            # For schedules, evaluate the function
+            lr = lr(self.model.optimizer.iterations)
+            
+        # Ensure 'lr' is in history and append current value
+        current_lr = float(tf.keras.backend.get_value(lr))
+        # Use history.history.setdefault to safely add 'lr' list if it doesn't exist
+        self.model.history.history.setdefault('lr', []).append(current_lr)
+
 
 class Lite_UNet():
     
@@ -28,7 +49,7 @@ class Lite_UNet():
         def decoder_block(x, residual, n_filters, n_conv_layers=2):
             up = UpSampling2D((2, 2))(x)
             merge = Concatenate()([up, residual])
-           
+            
             x = Conv2D(n_filters, (3, 3), padding="same")(merge)
             x = BatchNormalization()(x)
             x = Activation("relu")(x)
@@ -91,22 +112,24 @@ class Lite_UNet():
             ),
             keras.callbacks.ReduceLROnPlateau(
                 monitor='val_loss', factor=0.2, patience=5
-            )
+            ),
+            LrHistory() # Added custom callback to track LR
         ]
         return my_callbacks
 
     def compile_model(self):
         model = self.build_model()
         base_opt = tf.keras.optimizers.Adam(self.lr, clipnorm=1.0)
-        # opt = mixed_precision.LossScaleOptimizer(base_opt)   # <-- wrap optimizer
+        # opt = mixed_precision.LossScaleOptimizer(base_opt)    # <-- wrap optimizer
         opt = base_opt
         metrics = ['accuracy', self.dice_coef, self.iou, Recall(), Precision()]
         model.compile(loss=self.dice_loss, optimizer=opt, metrics=metrics)
         return model
 
+    # MODIFIED: Return history object
     def train(self, train_generator, val_generator, num_train_batches, num_val_batches):
         model = self.compile_model()
-        model.fit(
+        history = model.fit( # Capture the history object
             x=train_generator,
             validation_data=val_generator,
             epochs=self.epochs,
@@ -114,4 +137,59 @@ class Lite_UNet():
             validation_steps=num_val_batches,
             callbacks=self.define_callbacks()
         )
-        return model
+        return model, history # Return both model and history
+
+    # MODIFIED: Method to plot and SAVE the training history
+    def plot_history(self, history):
+        """Plots Learning Rate, Training Loss, and Validation Dice Coefficient over epochs and saves the graph."""
+        
+        # 1. Setup paths - ***THIS SECTION HAS BEEN MODIFIED***
+        # The specified absolute path for saving graphs
+        graphs_dir = r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Code\Lite-UNet\output_graphs"
+
+        # Create the 'output_graphs' folder if it does not exist
+        os.makedirs(graphs_dir, exist_ok=True)
+        
+        plt.figure(figsize=(15, 5))
+        
+        # 1. Learning Rate graph
+        plt.subplot(1, 3, 1)
+        plt.plot(history.history.get('lr', []))
+        plt.title('1. Learning Rate over Epochs')
+        plt.ylabel('Learning Rate')
+        plt.xlabel('Epoch')
+        plt.grid(True)
+        
+        # 2. Train Loss graph
+        plt.subplot(1, 3, 2)
+        plt.plot(history.history['loss'], label='Train Loss')
+        plt.title('2. Training Loss over Epochs')
+        plt.ylabel('Loss (Dice Loss)')
+        plt.xlabel('Epoch')
+        plt.legend()
+        plt.grid(True)
+
+        # 3. Validation Dice Coef graph
+        # The custom metric 'dice_coef' is tracked as 'val_dice_coef'
+        if 'val_dice_coef' in history.history:
+            plt.subplot(1, 3, 3)
+            plt.plot(history.history['val_dice_coef'], label='Validation Dice Coef')
+            plt.title('3. Validation Dice Coef over Epochs')
+            plt.ylabel('Dice Coefficient')
+            plt.xlabel('Epoch')
+            plt.legend()
+            plt.grid(True)
+        else:
+            print("Warning: 'val_dice_coef' not found in history. Cannot plot Validation Dice.")
+        
+        plt.tight_layout()
+
+        # 4. Save the figure
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"training_metrics_{timestamp}.png"
+        save_path = os.path.join(graphs_dir, filename)
+        
+        plt.savefig(save_path) # Save the figure instead of showing
+        plt.close() # Close the figure to free memory
+        
+        print(f"Training graphs successfully saved to: {save_path}")
