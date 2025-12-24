@@ -4,26 +4,26 @@ import argparse
 
 parser = argparse.ArgumentParser(description='lightU-net training script.')
 
-# ## Arguments for Dataloader for Bacterial Leaf Blight
-# parser.add_argument('--train_data',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Bacterial Leaf Blight\Training_Ori"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Bacterial Leaf Blight\Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Bacterial Leaf Blight\Val_Ori"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Bacterial Leaf Blight\Val_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-## Arguments for Dataloader for 
-parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
+## Arguments for Dataloader for Bacterial Leaf Blight
+parser.add_argument('--train_data',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Combined\Training_Ori"
                     ,type=str,help='Training images path')
-parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
+parser.add_argument('--train_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Combined\Training_GT"
                     ,type=str,help='Training masks path')
-parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
+parser.add_argument('--val_data',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Combined\Val_Ori"
                     ,type=str,help='Validation images path')
-parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
+parser.add_argument('--val_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Combined\Val_GT"
                     ,type=str,help='Validation masks path')
+
+
+# ## Arguments for Dataloader for 
+# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
+#                     ,type=str,help='Training images path')
+# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
+#                     ,type=str,help='Training masks path')
+# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
+#                     ,type=str,help='Validation images path')
+# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
+#                     ,type=str,help='Validation masks path')
 
 
 # ## Arguments for Dataloader for Training Dataset 2
@@ -102,17 +102,17 @@ parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4
 # parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
 #                     ,type=str,help='Validation masks path')
 
-parser.add_argument('--img_width',default=480,type=int)
-parser.add_argument('--img_height',default=640,type=int)
+parser.add_argument('--img_width',default=320,type=int)
+parser.add_argument('--img_height',default=320,type=int)
 
 #to be deleted
 #parser.add_argument('--val_size', default=0.2, type=float, help='validation data size.')
 
 # Arguments for lite-UNet model
-parser.add_argument('--batch_size', default=4, type=int, help='Batch size for training.')
+parser.add_argument('--batch_size', default=8, type=int, help='Batch size for training.')
 parser.add_argument('--lr', default=0.0001, type=float, help='Learning rate for optimizers.')
 parser.add_argument('--epochs', default=100, type=int, help='Number of training epochs.')
-parser.add_argument('--output_dir', default='Lite-UNet_model_BLB.h5', type=str, help='Path for saving the model after training.')
+parser.add_argument('--output_dir', default='Lite-UNet_model_combined.h5', type=str, help='Path for saving the model after training.')
 args = parser.parse_args()
 
 dl=DataLoader(args) # to be deleted

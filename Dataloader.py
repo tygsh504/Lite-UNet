@@ -50,8 +50,8 @@ class DataLoader():
         # optional if your ground truth masks contains noise it will be useful
         preprocessedMasks = []
         for mask in masks:
-            mask = cv2.erode(mask, None, iterations=5)
-            mask = cv2.dilate(mask, None, iterations=5)
+            # mask = cv2.erode(mask, None, iterations=1) #iterations = 5
+            # mask = cv2.dilate(mask, None, iterations=1) #iterations = 5
             mask = np.expand_dims(mask, axis=-1)
             preprocessedMasks.append(np.array(mask))
         preprocessedMasks = np.array(preprocessedMasks)
