@@ -28,7 +28,8 @@ class DataLoader():
         for path in images_dir:
             img = cv2.imread(path)
             img = cv2.resize(img, self.image_size)
-            img = img / 255.0
+            # img = img / 255.0
+            img = (img / 127.5) - 1.0  # Normalize to [-1, 1]
             imgs.append(np.array(img))
         imgs = np.array(imgs)
         return imgs

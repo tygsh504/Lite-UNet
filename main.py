@@ -25,7 +25,6 @@ parser.add_argument('--val_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4
 # parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
 #                     ,type=str,help='Validation masks path')
 
-
 # ## Arguments for Dataloader for Training Dataset 2
 # parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
 #                     ,type=str,help='Training images path')
@@ -102,14 +101,14 @@ parser.add_argument('--val_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4
 # parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
 #                     ,type=str,help='Validation masks path')
 
-parser.add_argument('--img_width',default=320,type=int)
-parser.add_argument('--img_height',default=320,type=int)
+parser.add_argument('--img_width',default=384,type=int)
+parser.add_argument('--img_height',default=512,type=int)
 
 #to be deleted
 #parser.add_argument('--val_size', default=0.2, type=float, help='validation data size.')
 
 # Arguments for lite-UNet model
-parser.add_argument('--batch_size', default=8, type=int, help='Batch size for training.')
+parser.add_argument('--batch_size', default=4, type=int, help='Batch size for training.')
 parser.add_argument('--lr', default=0.0001, type=float, help='Learning rate for optimizers.')
 parser.add_argument('--epochs', default=100, type=int, help='Number of training epochs.')
 parser.add_argument('--output_dir', default='Lite-UNet_model_combined.h5', type=str, help='Path for saving the model after training.')
