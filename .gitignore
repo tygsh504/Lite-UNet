@@ -4,3 +4,5 @@ venv/
 *.pyc
 /output_graphs
 /testing_output
+/training_results_output
+
