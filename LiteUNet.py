@@ -11,8 +11,9 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, C
 from keras.metrics import Recall, Precision
 from tensorflow.keras import mixed_precision
 import matplotlib.pyplot as plt 
-import os # NEW: Import for OS operations
-from datetime import datetime # NEW: Import for unique filenames
+import os 
+from datetime import datetime 
+import pandas as pd # NEW: Import pandas for Excel handling
 
 # Enable mixed precision globally
 # mixed_precision.set_global_policy("mixed_float16")
@@ -44,6 +45,12 @@ class Lite_UNet():
         self.lr = args.lr
         self.epochs = args.epochs
         self.output_dir = args.output_dir
+        # NEW: capture the result directory from arguments
+        self.result_dir = args.result_dir 
+        
+        # Ensure the directory exists
+        if self.result_dir:
+            os.makedirs(self.result_dir, exist_ok=True)
 
     def build_model(self, width_muliplier=0.35, weights="imagenet"):
         def decoder_block(x, residual, n_filters, n_conv_layers=2):
@@ -78,8 +85,7 @@ class Lite_UNet():
             x = decoder_block(x, layer_name, n_filters)
 
         out = Conv2D(1, (1, 1), padding="same", activation="sigmoid", dtype="float32")(x)
-        # Note: final output forced to float32 for numerical stability
-
+        
         model = Model(model_input, out)
         return model
 
@@ -102,9 +108,16 @@ class Lite_UNet():
         return 1.0 - self.dice_coef(y_true, y_pred)
 
     def define_callbacks(self):
+        # Determine where to save the best model checkpoint
+        # If result_dir is set, save 'best_model.h5' there, otherwise use output_dir
+        if self.result_dir:
+            checkpoint_path = os.path.join(self.result_dir, "best_model_weights.h5")
+        else:
+            checkpoint_path = self.output_dir
+
         my_callbacks = [
             keras.callbacks.ModelCheckpoint(
-                filepath=self.output_dir,
+                filepath=checkpoint_path,
                 monitor='val_loss',
                 mode='min',
                 save_best_only=True,
@@ -113,23 +126,21 @@ class Lite_UNet():
             keras.callbacks.ReduceLROnPlateau(
                 monitor='val_loss', factor=0.2, patience=5
             ),
-            LrHistory() # Added custom callback to track LR
+            LrHistory() 
         ]
         return my_callbacks
 
     def compile_model(self):
         model = self.build_model()
         base_opt = tf.keras.optimizers.Adam(self.lr, clipnorm=1.0)
-        # opt = mixed_precision.LossScaleOptimizer(base_opt)    # <-- wrap optimizer
         opt = base_opt
         metrics = ['accuracy', self.dice_coef, self.iou, Recall(), Precision()]
         model.compile(loss=self.dice_loss, optimizer=opt, metrics=metrics)
         return model
 
-    # MODIFIED: Return history object
     def train(self, train_generator, val_generator, num_train_batches, num_val_batches):
         model = self.compile_model()
-        history = model.fit( # Capture the history object
+        history = model.fit( 
             x=train_generator,
             validation_data=val_generator,
             epochs=self.epochs,
@@ -137,17 +148,17 @@ class Lite_UNet():
             validation_steps=num_val_batches,
             callbacks=self.define_callbacks()
         )
-        return model, history # Return both model and history
+        return model, history 
 
-    # MODIFIED: Method to plot and SAVE the training history
     def plot_history(self, history):
         """Plots Learning Rate, Training Loss, and Validation Dice Coefficient over epochs and saves the graph."""
         
-        # 1. Setup paths - ***THIS SECTION HAS BEEN MODIFIED***
-        # The specified absolute path for saving graphs
-        graphs_dir = r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Code\Lite-UNet\output_graphs"
+        # Use the result_dir if provided, otherwise default
+        if self.result_dir:
+            graphs_dir = self.result_dir
+        else:
+            graphs_dir = r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Code\Lite-UNet\output_graphs"
 
-        # Create the 'output_graphs' folder if it does not exist
         os.makedirs(graphs_dir, exist_ok=True)
         
         plt.figure(figsize=(15, 5))
@@ -170,7 +181,6 @@ class Lite_UNet():
         plt.grid(True)
 
         # 3. Validation Dice Coef graph
-        # The custom metric 'dice_coef' is tracked as 'val_dice_coef'
         if 'val_dice_coef' in history.history:
             plt.subplot(1, 3, 3)
             plt.plot(history.history['val_dice_coef'], label='Validation Dice Coef')
@@ -179,17 +189,45 @@ class Lite_UNet():
             plt.xlabel('Epoch')
             plt.legend()
             plt.grid(True)
-        else:
-            print("Warning: 'val_dice_coef' not found in history. Cannot plot Validation Dice.")
         
         plt.tight_layout()
 
-        # 4. Save the figure
+        # Save the figure
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"training_metrics_{timestamp}.png"
+        filename = f"training_graphs_{timestamp}.png"
         save_path = os.path.join(graphs_dir, filename)
         
-        plt.savefig(save_path) # Save the figure instead of showing
-        plt.close() # Close the figure to free memory
+        plt.savefig(save_path) 
+        plt.close() 
         
         print(f"Training graphs successfully saved to: {save_path}")
+
+    # NEW FUNCTION: Save metrics to Excel
+    def save_results_to_excel(self, history):
+        """Saves all training metrics from history to an Excel file."""
+        
+        if self.result_dir:
+            save_dir = self.result_dir
+        else:
+            # Fallback if no directory specified
+            save_dir = r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Code\Lite-UNet\output_graphs"
+            
+        os.makedirs(save_dir, exist_ok=True)
+
+        # Create DataFrame from history dictionary
+        df = pd.DataFrame(history.history)
+        
+        # Add an 'epoch' column at the beginning (1-based index)
+        df.insert(0, 'epoch', range(1, len(df) + 1))
+        
+        # Construct filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"training_metrics_{timestamp}.xlsx"
+        save_path = os.path.join(save_dir, filename)
+        
+        # Save to Excel
+        try:
+            df.to_excel(save_path, index=False)
+            print(f"Training metrics successfully saved to Excel: {save_path}")
+        except Exception as e:
+            print(f"Error saving Excel file: {e}")

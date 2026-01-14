@@ -14,107 +14,22 @@ parser.add_argument('--val_data',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE40
 parser.add_argument('--val_annot',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Combined\Val_GT"
                     ,type=str,help='Validation masks path')
 
-
-# ## Arguments for Dataloader for 
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-# ## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-# ## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-# ## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-# ## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-# ## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
-
-# ## Arguments for Dataloader for Training Dataset 2
-# parser.add_argument('--train_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_Original"
-#                     ,type=str,help='Training images path')
-# parser.add_argument('--train_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Training_GT"
-#                     ,type=str,help='Training masks path')
-# parser.add_argument('--val_data',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_Original"
-#                     ,type=str,help='Validation images path')
-# parser.add_argument('--val_annot',default=r"C:/Users/tygsh/OneDrive/Desktop/KIE4002_FYP/Training_Dataset_2/Validation_GT"
-#                     ,type=str,help='Validation masks path')
-
 parser.add_argument('--img_width',default=384,type=int)
 parser.add_argument('--img_height',default=512,type=int)
-
-#to be deleted
-#parser.add_argument('--val_size', default=0.2, type=float, help='validation data size.')
 
 # Arguments for lite-UNet model
 parser.add_argument('--batch_size', default=4, type=int, help='Batch size for training.')
 parser.add_argument('--lr', default=0.0001, type=float, help='Learning rate for optimizers.')
 parser.add_argument('--epochs', default=100, type=int, help='Number of training epochs.')
 parser.add_argument('--output_dir', default='Lite-UNet_model_combined.h5', type=str, help='Path for saving the model after training.')
+
+# NEW ARGUMENT: Directory to store Excel results and Graphs
+parser.add_argument('--result_dir', default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Code\Lite-UNet\results", 
+                    type=str, help='Directory to store graphs and excel results.')
+
 args = parser.parse_args()
 
-dl=DataLoader(args) # to be deleted
+dl=DataLoader(args) 
 train_gen,val_gen=dl.data_generator()
 train_steps=dl.get_train_steps_per_epoch()
 val_steps=dl.get_validation_steps_per_epoch()
@@ -125,3 +40,6 @@ model, history = LiteUNet.train(train_gen,val_gen,train_steps,val_steps)
 
 # Plot and save the training history
 LiteUNet.plot_history(history)
+
+# NEW: Save metrics to Excel
+LiteUNet.save_results_to_excel(history)
