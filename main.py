@@ -2,7 +2,7 @@ from Dataloader import DataLoader
 from LiteUNet import Lite_UNet
 import argparse
 
-parser = argparse.ArgumentParser(description='lightU-net training script.')
+parser = argparse.ArgumentParser(description='Lite-UNet training script.')
 
 ## Arguments for Dataloader for Bacterial Leaf Blight
 parser.add_argument('--train_data',default=r"C:\Users\tygsh\OneDrive\Desktop\KIE4002_FYP\Training_Dataset\Combined\Training_Ori"
